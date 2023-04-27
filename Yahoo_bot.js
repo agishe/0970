@@ -9,13 +9,30 @@
 // @grant        none
 // ==/UserScript==
 
-let keywords = ["Best PC games 2022: the must-play titles you don’t want to miss", "The 12 best beaches in Greece", "Moscow City Centre"];
+let keywords = [
+  "Find the perfect spot in the US for your next stargazing adventure",
+  "Why the Caribbean island of Montserrat celebrates St Patrick's Day",
+  "Picture yourself in Argentina with Elsewhere by Lonely Planet",
+];
 let keyword = keywords[getRandom(0, keywords.length)];
 let links = document.links;
+let yahooInput = document.getElementById("ybar-sbq");
+let btn = document.getElementById("ybar-search");
 
+if (btn != undefined) {
+  yahooInput.value = keyword;
+  btn.click();
+} else {
+  for (let i = 0; i < links.length; i++) {
+    if (links[i].href.indexOf("lonelyplanet.com") != -1) {
+      let link = links[i];
+      console.log("Найдена строка " + link);
+      link.click();
+    }
+}
 
+function getRandom(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
 
-
-//https://www.techradar.com/news/best-pc-games
 //https://www.lonelyplanet.com/articles/best-beaches-greece
-//https://www.expedia.com/Car-Rentals-In-Moscow-City-Centre.d3000662241.Car-Rental-Guide
