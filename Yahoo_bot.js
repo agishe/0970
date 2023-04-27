@@ -29,6 +29,7 @@ if (btn != undefined) {
       console.log("Найдена строка " + link);
       link.click();
     }
+  }
 }
 
 function getRandom(min, max) {
