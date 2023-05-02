@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bot for Bing
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description
 // @author       Kadyrova Maria
 // @match        https://www.bing.com/*
