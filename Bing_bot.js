@@ -1,20 +1,38 @@
 // ==UserScript==
 // @name         Bot for Bing
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description
 // @author       Kadyrova Maria
 // @match        https://www.bing.com/*
 // @match        https://napli.ru/*
+// @match        https://kiteuniverse.ru/
+// @match        https://motoreforma.com/
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant        none
 // ==/UserScript==
 
-let keywords = ["10 самых популярных шрифтов от Google", "VS Code", "Отключение редакций и ревизий в WordPress", "как использовать DevTools браузера", "Вывод произвольных типов записей и полей в WordPress"];
+let sites = {
+"napli.ru": ["10 самых популярных шрифтов от Google", "VS Code", "как использовать DevTools браузера", "Отключение редакций и ревизий в WordPress", "Вывод произвольных типов записей и полей в WordPress"],
+"kiteuniverse.ru": ["Шоу воздушных змеев", "Kite Universe", "Красота. Грация. Интеллект"],
+"motoreforma.com": ["мотореформа", "прошивки для CAN-AM", "тюнинг для квадроциклов Maverick X3"]
+}
+let searchIndex = Object.keys(sites);
+let site = searchIndex[getRandom(0, searchIndex.length)];
+let keywords = sites[site];
+
 let keyword = keywords[getRandom(0, keywords.length)];
 let links = document.links;
 let bingInput = document.getElementsByName("q")[0];
 let btn = document.getElementsByName("search")[0];
+
+if (btn != undefined) {
+  document.cookie = `site=${site}`
+} else if (location.hostname == "www.bing.com") {
+  site = getCookie("site");
+} else {
+  site = location.hostname;
+}
 
 if (btn != undefined) {
   let i = 0;
@@ -26,7 +44,7 @@ if (btn != undefined) {
       btn.click();
     }
   }, 500);
-} else if (location.hostname == "napli.ru") {
+} else if (location.hostname == site) {
   console.log("Мы на целевом сайте");
   setInterval(() => {
     let index = getRandom(0, links.length);
@@ -34,16 +52,16 @@ if (btn != undefined) {
       location.href = "https://www.bing.com/";
     }
     if (links.length == 0) {
-      location.href = "https://napli.ru/";
+      location.href = site;
     }
-    if (links[index].href.indexOf("napli.ru") != -1) {
+    if (links[index].href.indexOf(site) != -1) {
       links[index].click();
     }
   }, getRandom(2000, 5000));
 } else {
   let nextBingPage = true;
-  for(let i = 0; i < links.length; i++) {
-    if (links[i].href.indexOf("napli.ru") != -1) {
+  for (let i = 0; i < links.length; i++) {
+    if (links[i].href.indexOf(site) != -1) {
       let link = links[i];
       nextBingPage = false;
       console.log("Нашел строку " + link);
@@ -60,13 +78,22 @@ if (btn != undefined) {
       }
       clearInterval(elementExist);
     }
-  }, 100)
+  }, 100);
 
   if (nextBingPage) {
-    setTimeout(() => document.getElementsByClassName("sb_pagN")[0].click(), getRandom(2000, 4000));
+    setTimeout(
+      () => document.getElementsByClassName("sb_pagN")[0].click(),
+      getRandom(2000, 4000)
+    );
   }
 }
 
 function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
+}
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
 }
