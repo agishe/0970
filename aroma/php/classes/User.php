@@ -57,7 +57,9 @@ class User
 
     $result = $mysqli->query("SELECT * FROM `users` WHERE `email`='$email'");
 
-    if ($result->num_rows != 0) {
+    $result = $result->fetch_assoc();
+
+    if (password_verify($pass, $result["pass"])) {
       return json_encode(["result" => "success"]);
     } else {
       return json_encode(["result" => "not_found"]);
