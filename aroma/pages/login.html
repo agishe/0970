@@ -61,10 +61,12 @@
             </div>
             <p id="info" style="color: red; padding-left: 16px"></p>
             <div class="col-md-12 form-group">
-              <button type="submit" class="button button-login w-100">
+              <button
+                type="submit"
+                value="submit"
+                class="button button-login w-100">
                 Войти
               </button>
-              <a href="#">Забыли пароль?</a>
             </div>
           </form>
         </div>
@@ -106,6 +108,7 @@
     });
     let server = await response.json();
     if (server.result == "success") {
+      info.innerText = "";
       $("#modal").modal("show");
       setTimeout(() => {
         location.href = "users";
