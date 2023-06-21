@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS переменные</title>
+    <style>
+      :root {
+        --primary-color: rgb(228, 106, 106);
+        --unit: 1rem;
+        --primary-h: 220;
+        --primary-s: 70%;
+        --primary-l: 50%;
+      }
+
+      .article {
+        color: var(--primary-color);
+        margin-bottom: var(--unit);
+      }
+      .section-title {
+        --primary-color: green;
+        background-color: var(--primary-color);
+      }
+      .btn {
+        background-color: hsl(
+          var(--primary-h),
+          var(--primary-s),
+          var(--primary-l)
+        );
+      }
+      .btn:hover {
+        --primary-l: 70%;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      element.style.getPropertyValue("--unit");
+      getComputedStyle(element).getPropertyValue("--unit");
+    </script>
+  </body>
+</html>
